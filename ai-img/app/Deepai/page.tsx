@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-// Add the spinner CSS directly within the component for simplicity
 const spinnerStyle = `
   .spinner {
     border: 4px solid #f3f3f3;
@@ -29,12 +28,12 @@ const Home: React.FC = () => {
   const generateImage = async () => {
     if (!prompt.trim()) {
       setError("Please enter a valid prompt.");
-      return; // Exit if prompt is empty
+      return;
     }
 
     setLoading(true);
-    setImage(null); // Clear previous image
-    setError(null);  // Reset error before making the request
+    setImage(null);
+    setError(null);
 
     try {
       const response = await axios.post(
@@ -42,8 +41,8 @@ const Home: React.FC = () => {
         { text: prompt },
         {
           headers: {
-            "Api-Key": "e9c4cff9-1bf2-4fd8-8f00-2adda27cd7dd", // Ensure the key is valid
-            "Content-Type": "application/json",  // Explicitly setting Content-Type header
+            "Api-Key": "e9c4cff9-1bf2-4fd8-8f00-2adda27cd7dd",
+            "Content-Type": "application/json",
           },
         }
       );
@@ -81,14 +80,14 @@ const Home: React.FC = () => {
         <button
           onClick={generateImage}
           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          disabled={!prompt.trim()} // Disable button if prompt is empty
+          disabled={!prompt.trim()}
         >
           Generate Image
         </button>
 
-        {loading && <div className="spinner mx-auto mt-4"></div>}  {/* Show loading spinner */}
+        {loading && <div className="spinner mx-auto mt-4"></div>}
 
-        {error && <p className="text-red-500 mt-4">{error}</p>}  {/* Display error message if there is one */}
+        {error && <p className="text-red-500 mt-4">{error}</p>}
 
         {image && !loading && (
           <div>
@@ -98,7 +97,6 @@ const Home: React.FC = () => {
         )}
       </div>
 
-      {/* Include spinner style in the page */}
       <style>{spinnerStyle}</style>
     </div>
   );
