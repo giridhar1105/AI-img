@@ -3,6 +3,23 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+// Add the spinner CSS directly within the component for simplicity
+const spinnerStyle = `
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
 const Home: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [prompt, setPrompt] = useState<string>("");
@@ -12,12 +29,12 @@ const Home: React.FC = () => {
   const generateImage = async () => {
     if (!prompt.trim()) {
       setError("Please enter a valid prompt.");
-      return;
+      return; // Exit if prompt is empty
     }
 
     setLoading(true);
-    setImage(null);
-    setError(null); 
+    setImage(null); // Clear previous image
+    setError(null);  // Reset error before making the request
 
     try {
       const response = await axios.post(
@@ -25,8 +42,8 @@ const Home: React.FC = () => {
         { text: prompt },
         {
           headers: {
-            "Api-Key": "f3332e25-08d5-4fd8-bd7e-26f26f51df97",
-            "Content-Type": "application/json",
+            "Api-Key": "e9c4cff9-1bf2-4fd8-8f00-2adda27cd7dd", // Ensure the key is valid
+            "Content-Type": "application/json",  // Explicitly setting Content-Type header
           },
         }
       );
@@ -64,14 +81,14 @@ const Home: React.FC = () => {
         <button
           onClick={generateImage}
           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          disabled={!prompt.trim()}
+          disabled={!prompt.trim()} // Disable button if prompt is empty
         >
           Generate Image
         </button>
 
-        {loading && <div className="spinner mx-auto mt-4"></div>}
+        {loading && <div className="spinner mx-auto mt-4"></div>}  {/* Show loading spinner */}
 
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {error && <p className="text-red-500 mt-4">{error}</p>}  {/* Display error message if there is one */}
 
         {image && !loading && (
           <div>
@@ -80,6 +97,9 @@ const Home: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Include spinner style in the page */}
+      <style>{spinnerStyle}</style>
     </div>
   );
 };
