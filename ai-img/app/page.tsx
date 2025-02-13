@@ -1,59 +1,64 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Home: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
-  const [prompt, setPrompt] = useState<string>('');
+  const [width, setWidth] = useState<number>(200);
+  const [height, setHeight] = useState<number>(300);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const generateImage = async () => {
-    if (!prompt) return;
-    
+  const fetchImage = async () => {
     setLoading(true);
-    try {
-      // Replace this URL with your actual AI image generation API endpoint
-      const response = await fetch('https://picsum.photos/200/300');
-      setImage(response.url);
-    } catch (error) {
-      console.error('Error generating image:', error);
-    } finally {
-      setLoading(false);
-    }
+    const response = await fetch(`https://picsum.photos/${width}/${height}`);
+    setImage(response.url);
+    setLoading(false);
+  };
+
+  const handleGenerateImage = () => {
+    fetchImage();
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">AI Image Generator</h1>
-        
+        <h1 className="text-2xl font-bold mb-4">Random Image Generator</h1>
+
         <div className="mb-4">
           <input
-            type="text"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Enter image description..."
-            className="px-4 py-2 border rounded-lg mr-2"
+            type="number"
+            value={width}
+            onChange={(e) => setWidth(Number(e.target.value))}
+            className="border p-2 mr-2"
+            placeholder="Width"
+          />
+          <input
+            type="number"
+            value={height}
+            onChange={(e) => setHeight(Number(e.target.value))}
+            className="border p-2 mr-2"
+            placeholder="Height"
           />
           <button
-            onClick={generateImage}
-            disabled={loading || !prompt}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
+            onClick={handleGenerateImage}
+            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
           >
-            {loading ? 'Generating...' : 'Generate Image'}
+            Generate Image
           </button>
         </div>
 
-        {loading && <p className="text-gray-600">Generating image...</p>}
-        
-        {image && !loading && (
-          <img 
-            src={image} 
-            alt="Generated" 
-            width={200} 
-            height={300} 
-            className="rounded-lg shadow-md mx-auto"
-          />
+        {loading ? (
+          <p className="text-gray-600">Loading...</p>
+        ) : (
+          image && (
+            <img
+              src={image}
+              alt="Random"
+              width={width}
+              height={height}
+              className="rounded-lg shadow-md"
+            />
+          )
         )}
       </div>
     </div>
