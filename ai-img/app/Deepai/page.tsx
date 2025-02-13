@@ -41,7 +41,7 @@ const Home: React.FC = () => {
         { text: prompt },
         {
           headers: {
-            "Api-Key": "e9c4cff9-1bf2-4fd8-8f00-2adda27cd7dd",
+            "Api-Key": "lu-lu-la-la",
             "Content-Type": "application/json",
           },
         }
