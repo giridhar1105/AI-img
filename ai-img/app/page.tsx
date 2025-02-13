@@ -15,13 +15,19 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Random Image</h1>
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold mb-4">Random Image</h1>
         {image ? (
-          <img src={image} alt="Random" width={200} height={300} />
+          <img 
+            src={image} 
+            alt="Random" 
+            width={200} 
+            height={300} 
+            className="rounded-lg shadow-md"
+          />
         ) : (
-          <p>Loading...</p>
+          <p className="text-gray-600">Loading...</p>
         )}
       </div>
     </div>
