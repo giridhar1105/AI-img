@@ -17,7 +17,7 @@ const Home: React.FC = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <div style={{ textAlign: 'center' }}>
-        <h1>Random Image from Picsum</h1>
+        <h1>Random Image</h1>
         {image ? (
           <img src={image} alt="Random" width={200} height={300} />
         ) : (
