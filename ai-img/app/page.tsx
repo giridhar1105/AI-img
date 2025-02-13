@@ -13,7 +13,6 @@
 // export default MyComponent;
 
 
-
 "use client";
 
 import React, { useState } from "react";
@@ -26,28 +25,38 @@ const Home: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const generateImage = async () => {
+    if (!prompt.trim()) {
+      setError("Please enter a valid prompt.");
+      return;
+    }
+
     setLoading(true);
-    setError(null);  // Reset error before making the request
+    setImage(null);
+    setError(null); 
+
     try {
       const response = await axios.post(
         "https://api.deepai.org/api/text2img",
         { text: prompt },
         {
           headers: {
-            "Api-Key": "f3332e25-08d5-4fd8-bd7e-26f26f51df97", // Make sure the key is valid
-            "Content-Type": "application/json",  // Explicitly setting Content-Type header
+            "Api-Key": "f3332e25-08d5-4fd8-bd7e-26f26f51df97",
+            "Content-Type": "application/json",
           },
         }
       );
       setImage(response.data.output_url);
     } catch (error) {
-      // Check if it's an Axios error and log the response
       if (axios.isAxiosError(error)) {
-        console.error("Error message:", error.message);
-        console.error("Error details:", error.response?.data);
-        setError("Failed to generate image. Please check your API key or try again later.");
+        const status = error.response?.status;
+        if (status === 401) {
+          setError("Unauthorized: Invalid API key.");
+        } else if (status === 500) {
+          setError("Server error: Please try again later.");
+        } else {
+          setError("Failed to generate image. Please try again.");
+        }
       } else {
-        console.error("Unknown error:", error);
         setError("An unexpected error occurred.");
       }
     }
@@ -70,13 +79,14 @@ const Home: React.FC = () => {
         <button
           onClick={generateImage}
           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          disabled={!prompt.trim()}
         >
           Generate Image
         </button>
 
-        {loading && <p>Loading...</p>}
-        
-        {error && <p className="text-red-500">{error}</p>}  {/* Display error message if there is one */}
+        {loading && <div className="spinner mx-auto mt-4"></div>}
+
+        {error && <p className="text-red-500 mt-4">{error}</p>}
 
         {image && !loading && (
           <div>
